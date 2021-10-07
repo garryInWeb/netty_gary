@@ -95,7 +95,7 @@ public class DefaultThreadFactory implements ThreadFactory {
         this.priority = priority;
         this.threadGroup = threadGroup;
     }
-
+    // GlobalEventExecutor false Thread.NORM_PRIORITY(5 默认优先级)
     public DefaultThreadFactory(String poolName, boolean daemon, int priority) {
         this(poolName, daemon, priority, System.getSecurityManager() == null ?
                 Thread.currentThread().getThreadGroup() : System.getSecurityManager().getThreadGroup());

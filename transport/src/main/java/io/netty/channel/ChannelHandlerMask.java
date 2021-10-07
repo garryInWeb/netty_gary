@@ -94,7 +94,9 @@ final class ChannelHandlerMask {
             if (ChannelInboundHandler.class.isAssignableFrom(handlerType)) {
                 mask |= MASK_ALL_INBOUND;
 
+                // method 为空
                 if (isSkippable(handlerType, "channelRegistered", ChannelHandlerContext.class)) {
+                    // 进入 isSkippable 后会把对应标志位清空
                     mask &= ~MASK_CHANNEL_REGISTERED;
                 }
                 if (isSkippable(handlerType, "channelUnregistered", ChannelHandlerContext.class)) {

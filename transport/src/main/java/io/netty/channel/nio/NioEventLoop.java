@@ -135,6 +135,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
     NioEventLoop(NioEventLoopGroup parent, Executor executor, SelectorProvider selectorProvider,
                  SelectStrategy strategy, RejectedExecutionHandler rejectedExecutionHandler,
                  EventLoopTaskQueueFactory queueFactory) {
+        // 多个NioEventLoop 共用同一个 ThreadPerTaskExecutor
         super(parent, executor, false, newTaskQueue(queueFactory), newTaskQueue(queueFactory),
                 rejectedExecutionHandler);
         this.provider = ObjectUtil.checkNotNull(selectorProvider, "selectorProvider");
@@ -431,6 +432,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
         }
     }
 
+    // 单线程一直在运行的方法
     @Override
     protected void run() {
         int selectCnt = 0;

@@ -399,6 +399,7 @@ public abstract class AbstractNioChannel extends AbstractChannel {
         eventLoop().cancel(selectionKey());
     }
 
+    // 在这里把 ServerSocketChannel 注册到 Selector 的 accept 事件
     @Override
     protected void doBeginRead() throws Exception {
         // Channel.read() or ChannelHandlerContext.read() was called
@@ -411,6 +412,7 @@ public abstract class AbstractNioChannel extends AbstractChannel {
 
         final int interestOps = selectionKey.interestOps();
         if ((interestOps & readInterestOp) == 0) {
+            // 这里就是 SelectionKey.OP_ACCEPT
             selectionKey.interestOps(interestOps | readInterestOp);
         }
     }

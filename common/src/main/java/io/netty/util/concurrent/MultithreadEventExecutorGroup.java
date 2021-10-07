@@ -68,11 +68,14 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
      */
     protected MultithreadEventExecutorGroup(int nThreads, Executor executor,
                                             EventExecutorChooserFactory chooserFactory, Object... args) {
+
+        // 默认就是系统cpu核心数*
         if (nThreads <= 0) {
             throw new IllegalArgumentException(String.format("nThreads: %d (expected: > 0)", nThreads));
         }
-
+        // 除非自己传入了，否则一般是空
         if (executor == null) {
+            // netty 自己实现了线程池
             executor = new ThreadPerTaskExecutor(newDefaultThreadFactory());
         }
 
