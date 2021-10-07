@@ -303,11 +303,15 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
             return promise;
         }
     }
-
+    // 初始化 ServerSocketChannel 注册到 Selector多路复用上面去
     final ChannelFuture initAndRegister() {
         Channel channel = null;
         try {
+            // ReflectiveChannelFactory
+            // NioServerSocketChannel 包含了 ServerSocketChannel 配置好了blocking false，包含了 OP_ACCEPT 网络事件
             channel = channelFactory.newChannel();
+            // 接下来肯定就是去监听某个端口号，设置网络参数
+            // 然后再让这个 NioServerSocketChannel 去注册到Selector上去，关注 OP_ACCEPT 事件，开始轮训
             init(channel);
         } catch (Throwable t) {
             if (channel != null) {
@@ -320,6 +324,8 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
             return new DefaultChannelPromise(new FailedChannel(), GlobalEventExecutor.INSTANCE).setFailure(t);
         }
 
+        // parent EventLoopGroup
+        // 把 NioServerSocketChannel 注册到 EventLoop 的Selector上
         ChannelFuture regFuture = config().group().register(channel);
         if (regFuture.cause() != null) {
             if (channel.isRegistered()) {

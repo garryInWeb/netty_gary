@@ -69,7 +69,7 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
     protected MultithreadEventExecutorGroup(int nThreads, Executor executor,
                                             EventExecutorChooserFactory chooserFactory, Object... args) {
 
-        // 默认就是系统cpu核心数*
+        // 默认就是系统cpu核心数*2
         if (nThreads <= 0) {
             throw new IllegalArgumentException(String.format("nThreads: %d (expected: > 0)", nThreads));
         }
@@ -79,6 +79,7 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
             executor = new ThreadPerTaskExecutor(newDefaultThreadFactory());
         }
 
+        // 默认就是系统cpu核心数*2
         children = new EventExecutor[nThreads];
 
         for (int i = 0; i < nThreads; i ++) {

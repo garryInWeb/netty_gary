@@ -890,6 +890,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
         }
     }
 
+    // 作为客户端，并且连接成功的时候
     @Override
     public final ChannelPipeline fireChannelActive() {
         AbstractChannelHandlerContext.invokeChannelActive(head);

@@ -205,6 +205,8 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
             };
         }
 
+        // 建立连接的时候是通过这个handler去处理注册
+        // 以及把我们实现的handler 放到连接的 NioSocketChannel 的 pipeline 里面去的
         @Override
         @SuppressWarnings("unchecked")
         public void channelRead(ChannelHandlerContext ctx, Object msg) {

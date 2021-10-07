@@ -140,6 +140,7 @@ public abstract class AbstractNioByteChannel extends AbstractNioChannel {
             }
             final ChannelPipeline pipeline = pipeline();
             final ByteBufAllocator allocator = config.getAllocator();
+            // 根据上一次传输数据的大小预估本次需要的缓冲区大小
             final RecvByteBufAllocator.Handle allocHandle = recvBufAllocHandle();
             allocHandle.reset(config);
 
@@ -163,6 +164,11 @@ public abstract class AbstractNioByteChannel extends AbstractNioChannel {
 
                     allocHandle.incMessagesRead(1);
                     readPending = false;
+                    // 不管是 accept还是 read 都是这个方法
+                    // 对于accept的话是进入NioServerSocketChannel的pipeline
+                    // 他自己添加的第一个handler的 channelRead 就是处理了 accept请求的
+
+                    // 对于 read的话其实是进入 NioSocketChannel 的pipeline，这里就是开发自己实现的handler了
                     pipeline.fireChannelRead(byteBuf);
                     byteBuf = null;
                 } while (allocHandle.continueReading());
